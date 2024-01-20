@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "625512673326",
+    "project_id": "stock-market-trading-app-5a9a8",
+    "storage_bucket": "stock-market-trading-app-5a9a8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:625512673326:android:70621b94e716066e49afbf",
+        "android_client_info": {
+          "package_name": "com.example.stock_market_trading_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7_8S4lxvGnueBsBrhVO8GKu7IRFmgFT8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
