@@ -1,61 +1,39 @@
 import 'package:stock_market_trading_app/auth_controller.dart';
-import 'package:stock_market_trading_app/home.dart';
-import 'package:stock_market_trading_app/home_controller.dart';
-import 'package:stock_market_trading_app/home_screen.dart';
 import 'package:stock_market_trading_app/login_page.dart';
-import 'package:stock_market_trading_app/signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:stock_market_trading_app/watchlist.dart';
-
-import 'firebase_options.dart';
-import 'navbar.dart';
-// import 'login_page.dart';
+import 'package:stock_market_trading_app/firebase_options.dart';
 
 Future<void> main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp().then((value) => Get.put(AuthController()));
-  // await Firebase.initializeApp();
-  // Get.put(AuthController());
-  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)
+      .then((value) => Get.put(AuthController()));
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          scaffoldBackgroundColor: Colors.transparent,
-          appBarTheme: const AppBarTheme(backgroundColor: Colors.transparent),
-          // This is the theme of your application.
-          //
-          // TRY THIS: Try running your application with "flutter run". You'll see
-          // the application has a purple toolbar. Then, without quitting the app,
-          // try changing the seedColor in the colorScheme below to Colors.green
-          // and then invoke "hot reload" (save your changes or press the "hot
-          // reload" button in a Flutter-supported IDE, or press "r" if you used
-          // the command line to start the app).
-          //
-          // Notice that the counter didn't reset back to zero; the application
-          // state is not lost during the reload. To reset the state, use hot
-          // restart instead.
-          //
-          // This works for code too, not just values: Most code changes can be
-          // tested with just a hot reload.
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.transparent,
+        appBarTheme: const AppBarTheme(backgroundColor: Colors.transparent),
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+          primary: Colors.deepPurple,
         ),
-        home: const LoginPage()
+        // If you're using Flutter 2.0 or above, you may not need the next line.
+        // flutterWebScroller: true,
+      ),
+      home: const LoginPage(),
     );
   }
 }
+
 
 // class MyHomePage extends StatefulWidget {
 //   const MyHomePage({super.key, required this.title});

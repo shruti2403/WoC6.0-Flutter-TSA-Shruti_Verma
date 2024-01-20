@@ -223,7 +223,7 @@ class SignUpPage extends StatelessWidget {
               SizedBox(height: 50,),
               GestureDetector(
                 onTap: (){
-                  AuthController.instance.register(emailController.text.trim(), passwordController.text.trim(),nameController.text.trim(),numberController.text.trim());
+                  AuthController.instance.register(emailController.text.trim(), passwordController.text.trim() );
                 },
                 child: Container(
                   width: w*0.5,
