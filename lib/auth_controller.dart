@@ -15,12 +15,26 @@ class AuthController extends GetxController{
 
   @override
 
-  void onReady()
-  {
-    super.onReady();
-    _user = Rx<User?>(auth.currentUser) ;
-    _user.bindStream(auth.userChanges());
-    ever(_user, _initialScreen);
+  // void onReady()
+  // {
+  //   super.onReady();
+  //   _user = Rx<User?>(auth.currentUser) ;
+  //   _user.bindStream(auth.userChanges());
+  //   ever(_user, _initialScreen);
+  // }
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Rx<User?> user = Rx<User?>(null);
+  RxBool isLoggedIn = RxBool(false);
+
+  @override
+  void onInit() {
+    super.onInit();
+    // Observe changes in authentication state
+    _auth.authStateChanges().listen((User? newUser) {
+      user(newUser);
+      isLoggedIn(newUser != null);
+    });
   }
 
   _initialScreen(User? user)
