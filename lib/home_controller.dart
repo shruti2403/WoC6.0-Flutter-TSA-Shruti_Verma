@@ -1,14 +1,13 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:stock_market_trading_app/home_screen.dart';
 import 'package:stock_market_trading_app/stocks/stock.dart';
 import 'package:stock_market_trading_app/stocks/stocks_controller.dart';
+import 'package:stock_market_trading_app/welcome_page.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -18,8 +17,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     double myHeight = MediaQuery.of(context).size.height;
-    double myWidth = MediaQuery.of(context).size.width;
-    var controller = Get.put(HomeController());
+    var controller = Get.find<HomeController>(); // Use Get.find() to get the controller
+
     var navbarItem = [
       BottomNavigationBarItem(
         icon: Image.asset(
@@ -32,7 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
           height: myHeight * 0.03,
         ),
       ),
-
       BottomNavigationBarItem(
         icon: GestureDetector(
           onTap: () => Get.to(() => Stocks()),
@@ -75,16 +73,17 @@ class _HomeScreenState extends State<HomeScreen> {
       Stocks(),
       Stocks(),
       Container(color: Colors.purple,),
-      Container(color: Colors.cyan,),
+      WelcomePage(email: ''),
     ];
+
     return Scaffold(
-      body:Column(
+      body: Column(
         children: [
-          Obx(()=> Expanded(child: navBody.elementAt(controller.currentNavIndex.value))),
+          Obx(() => Expanded(child: navBody[controller.currentNavIndex.value])),
         ],
       ),
-      bottomNavigationBar: Obx(()=>
-        BottomNavigationBar(
+      bottomNavigationBar: Obx(
+            () => BottomNavigationBar(
           currentIndex: controller.currentNavIndex.value,
           selectedItemColor: Colors.red,
           selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
@@ -93,9 +92,8 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: Colors.white,
           items: navbarItem,
           onTap: (value) {
-            // If you want to navigate when other tabs are tapped, uncomment the following line.
-            // Get.to(() => pages[index]);
-            controller.currentNavIndex.value = value;          },
+            controller.currentNavIndex.value = value;
+          },
         ),
       ),
     );

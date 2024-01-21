@@ -12,10 +12,10 @@ class SignUpPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var emailController = TextEditingController();
-    var passwordController = TextEditingController();
-    var nameController = TextEditingController();
-    var numberController = TextEditingController();
+    TextEditingController emailController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
+    TextEditingController nameController = TextEditingController();
+    TextEditingController numberController = TextEditingController();
 
 
     double w = MediaQuery.of(context).size.width;
@@ -223,7 +223,7 @@ class SignUpPage extends StatelessWidget {
               SizedBox(height: 50,),
               GestureDetector(
                 onTap: (){
-                  AuthController.instance.register(emailController.text.trim(), passwordController.text.trim() );
+                  AuthController.instance.signUpwithEmailAndPassword(emailController.text.trim(), passwordController.text.trim() );
                 },
                 child: Container(
                   width: w*0.5,
@@ -282,4 +282,5 @@ class SignUpPage extends StatelessWidget {
         )
     );
   }
+
 }

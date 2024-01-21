@@ -2,6 +2,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stock_market_trading_app/signup_page.dart';
+import 'package:stock_market_trading_app/auth_controller.dart';
+import 'package:stock_market_trading_app/welcome_page.dart'; // Import your AuthController
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key});
@@ -26,7 +28,6 @@ class _LoginPageState extends State<LoginPage> {
             decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage("img/LoginPage.jpg"),
-                // fit: BoxFit.cover
               ),
             ),
           ),
@@ -110,23 +111,36 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildSignInButton(double w, double h) {
-    return Container(
-      width: w * 0.5,
-      height: h * 0.08,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
-        image: DecorationImage(
-          image: AssetImage("img/Signinbtn.jpg"),
-          // fit: BoxFit.cover
+    return GestureDetector(
+      onTap: () {
+        // Add your login logic here
+        AuthController.instance.signInWithEmailAndPassword("username", "password").then((user) {
+          if (user != null) {
+            // Login successful, navigate to WelcomePage
+            Get.off(() => WelcomePage(email: "example@example.com")); // Replace with the actual email
+          } else {
+            // Handle login failure, show an error message if necessary
+            print("Login failed");
+          }
+        });
+      },
+      child: Container(
+        width: w * 0.5,
+        height: h * 0.08,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30),
+          image: DecorationImage(
+            image: AssetImage("img/Signinbtn.jpg"),
+          ),
         ),
-      ),
-      child: Center(
-        child: Text(
-          "Sign In",
-          style: TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+        child: Center(
+          child: Text(
+            "Sign In",
+            style: TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
         ),
       ),

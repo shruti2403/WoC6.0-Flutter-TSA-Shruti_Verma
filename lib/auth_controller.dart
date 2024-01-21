@@ -14,34 +14,39 @@ class AuthController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // Observe changes in authentication state
     _auth.authStateChanges().listen((User? newUser) {
+      print("Auth state changed: $newUser");
       user(newUser);
       isLoggedIn(newUser != null);
       _initialScreen(newUser);
     });
   }
 
+
   void _initialScreen(User? user) {
     if (user == null) {
       print("Login page");
-      Get.offAll(() => LoginPage());
+      Get.to(() => LoginPage());
     } else {
-      Get.offAll(() => WelcomePage(email: user.email ?? ""));
+      print("Welcome page");
+      Get.to(() => WelcomePage(email: user.email ?? ""));
     }
   }
 
-  void register(String email, String password) async {
+
+  Future<User?>signUpwithEmailAndPassword(String email, String password) async {
     try {
-      await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      UserCredential credential=  await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      return credential.user;
     } catch (e) {
       _showSnackbar("Account creation failed", e.toString());
     }
   }
 
-  void login(String email, String password) async {
+  Future<User?> signInWithEmailAndPassword(String email, String password) async {
     try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      UserCredential credential = await _auth.signInWithEmailAndPassword(email: email, password: password);
+      return credential.user;
     } catch (e) {
       _showSnackbar("Login failed", e.toString());
     }
