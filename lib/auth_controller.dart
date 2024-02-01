@@ -26,7 +26,7 @@ class AuthController extends GetxController {
   void _initialScreen(User? user) {
     if (user == null) {
       print("Login page");
-      Get.to(() => LoginPage());
+      Get.to(() => LoginView());
     } else {
       print("Welcome page");
       Get.to(() => WelcomePage(email: user.email ?? ""));

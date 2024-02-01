@@ -17,23 +17,26 @@ class _StocksState extends State<Stocks> {
     double w = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Stocks'),
+      ),
       body: Container(
         height: h,
         width: w,
         padding: EdgeInsets.all(10),
-        color: Colors.black,
+        color: Colors.blue,
         child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                "Stocks",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              // Text(
+              //   "Stocks",
+              //   style: TextStyle(
+              //     color: Colors.white,
+              //     fontSize: 30,
+              //     fontWeight: FontWeight.bold,
+              //   ),
+              // ),
               Padding(
                 padding: const EdgeInsets.only(top: 7, left: 10, right: 10), // Add padding
                 child: SizedBox(

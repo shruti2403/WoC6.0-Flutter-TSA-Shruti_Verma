@@ -1,160 +1,95 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
+import 'package:stock_market_trading_app/News/views/home.dart';
+import 'package:stock_market_trading_app/Watchlist/favorite_list.dart';
+import 'package:stock_market_trading_app/Watchlist/favorite_page.dart';
+import 'package:stock_market_trading_app/Watchlist/watchlist.dart';
+import 'package:stock_market_trading_app/Watchlist/watchlist_page_models.dart';
 import 'package:stock_market_trading_app/auth_controller.dart';
 import 'package:stock_market_trading_app/firebase_options.dart';
+import 'package:stock_market_trading_app/login_page.dart';
 import 'package:stock_market_trading_app/stocks/list.dart';
 import 'package:stock_market_trading_app/stocks/stock.dart';
-import 'package:stock_market_trading_app/watchlist.dart';
 import 'package:stock_market_trading_app/welcome_page.dart';
 
-import 'home_controller.dart';
-import 'home_screen.dart';
+import 'Watchlist/watch_list.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)
       .then((value) => Get.put(AuthController()));
-  runApp(const MyApp());
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        scaffoldBackgroundColor: Colors.transparent,
-        appBarTheme: const AppBarTheme(backgroundColor: Colors.transparent),
-        colorScheme: ColorScheme.fromSwatch().copyWith(
-          primary: Colors.deepPurple,
+    return MultiProvider(
+      providers: [
+        Provider(create: (context) => FavoriteListModel()),
+        ChangeNotifierProxyProvider<FavoriteListModel, FavoritePageModel>(
+          create: (context) => FavoritePageModel(),
+          update: (context, favoritelist, favoritepage) {
+            if (favoritepage == null) {
+              throw ArgumentError.notNull('favoritepage');
+            }
+            favoritepage.favoritelist = favoritelist;
+            return favoritepage;
+          },
         ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.grey,
+          scaffoldBackgroundColor: Colors.grey.shade600,
+        ),
+        // initialRoute: '/',
+        // routes: {
+        //   '/': (context) => FavoriteList(),
+        //   '/favoritepage': (context) => FavoritePage(),
+        // },
+
+        home: Home(),
       ),
-      home: const Stocks(),
     );
   }
 }
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+
+class VerifyEmailView extends StatefulWidget {
+  const VerifyEmailView({Key? key}) : super(key: key);
 
   @override
+  State<VerifyEmailView> createState() => _VerifyEmailViewState();
+}
+
+class _VerifyEmailViewState extends State<VerifyEmailView> {
+  @override
   Widget build(BuildContext context) {
-    double myHeight = MediaQuery.of(context).size.height;
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Verify email'),
+      ),
       body: Column(
         children: [
-          Obx(() => Expanded(child: Container(color: Colors.blue))), // Replace with your actual UI
+          Text('Please Verify your Email'),
+          TextButton(
+            onPressed: () async {
+              final user = FirebaseAuth.instance.currentUser;
+              if (user != null) {
+                await user.sendEmailVerification();
+              }
+            },
+            child: Text('Send Email Verification'),
+          )
         ],
       ),
-      bottomNavigationBar: Obx(() => BottomNavigationBar(
-        currentIndex: Get.find<HomeController>().currentNavIndex.value,
-        selectedItemColor: Colors.red,
-        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-        unselectedItemColor: Colors.grey,
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.white,
-        items: const [],
-        onTap: (value) {
-          Get.find<HomeController>().currentNavIndex.value = value;
-        },
-      )),
     );
   }
 }
-
-void lazyPutController() {
-  Get.lazyPut<HomeController>(() => HomeController());
-}
-
-// class HomeNavigationPage extends StatefulWidget {
-//   const HomeNavigationPage({Key? key, required this.currentIndex}) : super(key: key);
-//
-//   late int currentIndex;
-//
-//   @override
-//   _HomeNavigationPageState createState() => _HomeNavigationPageState();
-// }
-
-// class _HomeNavigationPageState extends State<HomeNavigationPage> {
-//   final screens = [
-//     const Watchlist(),
-//     const Stocks(),
-//     const Stocks(),
-//     const WelcomePage(email: ''),
-//   ];
-
-//   @override
-//   Widget build(BuildContext context) {
-//     double h = MediaQuery.of(context).size.height;
-//     return Scaffold(
-//       body: IndexedStack(
-//         index: widget.currentIndex,
-//         children: screens,
-//       ),
-//       bottomNavigationBar: BottomNavigationBar(
-//         backgroundColor: Colors.white,
-//         unselectedItemColor: Colors.grey,
-//         selectedItemColor: Colors.greenAccent,
-//         currentIndex: widget.currentIndex,
-//         onTap: (index) {
-//           setState(() {
-//             widget.currentIndex = index;
-//           });
-//         },
-//         items:  [
-//           BottomNavigationBarItem(
-//             icon: Image.asset(
-//               'img/watchlist.png',
-//               height: h * 0.03,
-//             ),
-//             label: '',
-//             activeIcon: Image.asset(
-//               'img/watchlist.png',
-//               height: h * 0.03,
-//             ),
-//           ),
-//           BottomNavigationBarItem(
-//             icon: GestureDetector(
-//               onTap: () => Get.to(() => const Stocks()),
-//               child: Image.asset(
-//                 'img/stocks.jpg',
-//                 height: h * 0.03,
-//               ),
-//             ),
-//             label: '',
-//             activeIcon: Image.asset(
-//               'img/stocks.jpg',
-//               height: h * 0.03,
-//             ),
-//           ),
-//           BottomNavigationBarItem(
-//             icon: Image.asset(
-//               'img/news.png',
-//               height: h * 0.03,
-//             ),
-//             label: '',
-//             activeIcon: Image.asset(
-//               'img/news.png',
-//               height: h * 0.03,
-//             ),
-//           ),
-//           BottomNavigationBarItem(
-//             icon: Image.asset(
-//               'img/home.png',
-//               height: h * 0.03,
-//             ),
-//             label: '',
-//             activeIcon: Image.asset(
-//               'img/home.png',
-//               height: h * 0.03,
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
