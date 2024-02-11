@@ -42,12 +42,12 @@ class _ArticleViewState extends State<ArticleView> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        child: WebView(
-          initialUrl: widget.blogUrl,
-          onWebViewCreated: (WebViewController webViewController) {
-            _controller.complete(webViewController);
-          },
-        ),
+        // child: WebView(
+        //   initialUrl: widget.blogUrl,
+        //   onWebViewCreated: (WebViewController webViewController) {
+        //     _controller.complete(webViewController);
+        //   },
+        // ),
       ),
     );
   }
